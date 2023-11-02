@@ -6,21 +6,21 @@ extern "C" {
 #endif
 
 /* The configurations for sending packets */
-/* sending_pkt: Sent pkt or not?  */
-/* pkt_int_us:  the packet interval between 2 pkt_s  */
-/* pkt_num:     the total amount of packets we would like to sent */
+/* send_pkt: Sending pkt or not?  */
+/* send_port: Sending port  */
+/* pkt_send__int_us:  the packet interval between 2 pkt_s  */
+/* pkt_send_num:     the total amount of packets we would like to sent */
 typedef struct{
   int   send_pkt;
   int   send_port;
 
   int   pkt_send_int_us;
   int   pkt_send_num;
-
-  int   recv_pkt;
-  int   recv_port;
-
 }pkt_sent_config_t;
 
+/* The configurations for recving packets */
+/* recv_pkt: Receive pkt or not?  */
+/* recv_port: Recving port */
 typedef struct{
   int   recv_pkt;
   int   recv_port;
