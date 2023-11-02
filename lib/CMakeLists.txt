@@ -12,13 +12,14 @@ file(GLOB_RECURSE SINK_SOURCE_FILES "src/*.c" "src/*.h")
 file(GLOB_RECURSE SINK_INCLUDE_FILES "include/*.h")
 
 find_package(libconfig CONFIG REQUIRED)
+
 # build the library
 add_library(${PROJECT_NAME} SHARED ${SINK_INCLUDE_FILES} ${SINK_SOURCE_FILES} )
 
+target_link_libraries(${PROJECT_NAME} config)
+
 target_include_directories(${PROJECT_NAME} PUBLIC ${SINK_PUBLIC_INCLUDE_DIRECTORIES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${SINK_PRIVATE_INCLUDE_DIRECTORIES})
-
-target_link_libraries(${PROJECT_NAME} config)
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES

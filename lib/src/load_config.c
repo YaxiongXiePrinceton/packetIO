@@ -3,7 +3,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <libconfig.h>
-#include "ngscope/hdr/dciLib/load_config.h"
+
+#include "load_config.h"
 
 int compar(const void* a,const void* b)
 {
@@ -23,7 +24,8 @@ bool containsDuplicate(long long* nums, int numsSize){
     return false;
 }
 
-int packetIO_read_config(serv_cli_config_t* config, char * path);
+int packetIO_read_config(serv_cli_config_t* config, char * path)
+{
   config_t* cfg = (config_t *)malloc(sizeof(config_t));
   config_init(cfg);
 

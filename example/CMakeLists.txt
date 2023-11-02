@@ -25,5 +25,5 @@ LINK_DIRECTORIES(
 find_package(Threads REQUIRED)
 
 #find_package(dcisink)
-target_link_libraries(server pktsock config pthread)
-target_link_libraries(client pktsock config pthread)
+target_link_libraries(server packetio config pthread)
+target_link_libraries(client packetio config pthread)

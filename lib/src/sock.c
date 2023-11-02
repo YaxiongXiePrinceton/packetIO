@@ -16,7 +16,6 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-
 // set sock in non-block mode
 void sock_setnonblocking(int sockfd) {
   int flag = fcntl(sockfd, F_GETFL, 0);
@@ -84,7 +83,7 @@ int sock_connectServer_w_config_udp(char serv_IP[40], int serv_port) {
          sizeof(servaddr));
 
   int nof_serv_pkt = 0;
-  while (!go_exit) {
+  while (true) {
     unsigned int len = sizeof(servaddr);
     int recvLen = recvfrom(sockfd, (char *)buffer, 1400, 0,
                            (struct sockaddr *)&servaddr, &len);

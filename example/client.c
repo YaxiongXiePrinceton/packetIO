@@ -21,7 +21,7 @@
 
 int main(int argc, char** argv){
   int c;
-  pkt_recv_config_t config;
+  serv_cli_config_t config;
   char* config_path = NULL;
 
   /* Parsing command line arguments */
@@ -31,17 +31,14 @@ int main(int argc, char** argv){
         config_path = optarg;
         break;
       case 'h':
-        print_help();
         return 0;
       case '?':
         if (optopt == 'c')
           fprintf (stderr, "Option -%c requires an argument.\n", optopt);
         else {
-          print_help();
           return 1;
         }
       default:
-        print_help();
         return 1;
     }
   }
