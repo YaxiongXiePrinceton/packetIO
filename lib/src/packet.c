@@ -29,3 +29,14 @@ int packet_generate(char pkt_buf[1500], pkt_header_t *pkt_header, void *payload,
 
   return pkt_size;
 }
+
+int packet_decompose(char pkt_buf[1500], int pkt_size, pkt_header_t *pkt_header,
+                     char payload_buf[1500]) {
+  // copy the header
+  int head_size = sizeof(pkt_header_t);
+  memcpy(pkt_buf, pkt_header, head_size);
+
+  memcpy(pkt_buf[head_size], payload_buf, pkt_size - head_size);
+
+  return 0;
+}

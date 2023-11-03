@@ -82,6 +82,16 @@ int main(int argc, char **argv) {
                              sizeof(serv_cli_config_t));
 
   printf("pkt size:%d \n", pkt_size);
+
+  pkt_header_t new_pkt_header;
+  char payload_buf[1500];
+  packet_decompose(pkt_buf, pkt_size, &new_pkt_header, payload_buf);
+
+  serv_cli_config_t *new_config;
+  new_config = (serv_cli_config_t *)payload_buf;
+
+  printf("config local IP:%s", new_config.local_IP);
+
   if (config.sender) {
   }
   return 0;
