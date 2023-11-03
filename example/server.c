@@ -18,6 +18,7 @@
 
 #include "load_config.h"
 #include "nat_punch.h"
+#include "packet.h"
 #include "sock.h"
 
 int main(int argc, char **argv) {
@@ -69,6 +70,12 @@ int main(int argc, char **argv) {
     remote_addr = sock_create_serv_addr(config.remote_IP, config.remote_port);
     nat_punch_client(sock_fd, remote_addr);
   }
+
+  pkt_header_t pkt_header;
+  char pkt_buf[1500];
+
+  packet_generate(pkt_buf, &pkt_header, (void *)&config,
+                  sizeof(serv_cli_config_t));
 
   if (config.sender) {
   }
