@@ -54,8 +54,7 @@ int main(int argc, char **argv) {
   bool recv_port = config.pkt_recv_config.recv_port;
 
   int sock_fd = 0;
-  sock_fd =
-      sock_create_udp_socket(config.local_IP, config.pkt_recv_config.recv_port);
+  sock_fd = sock_create_udp_socket(config.local_IP, config.local_port);
 
   /* struct sockaddr_in remote_addr; */
   /* // now we need to figure out the remote addr */
