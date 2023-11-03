@@ -52,6 +52,7 @@ int packetIO_read_config(serv_cli_config_t* config, char * path)
     printf("ERROR: reading local_IP\n");
   }
   strcpy(config->local_IP, loca_IP);
+  printf("CONFIG -> Local IP: %s\n", config->local_IP);
 
   /* read the remote IP */
   const char* remote_IP;
@@ -59,6 +60,8 @@ int packetIO_read_config(serv_cli_config_t* config, char * path)
     printf("ERROR: reading remote_IP\n");
   }
   strcpy(config->remote_IP, remote_IP);
+  printf("CONFIG -> remote IP: %s\n", config->remote_IP);
+
 
 /********************** END of IP related ***********************/
 
