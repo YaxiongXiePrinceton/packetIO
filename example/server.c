@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
   serv_cli_config_t *new_config;
   new_config = (serv_cli_config_t *)payload_buf;
 
-  printf("config local IP:%s", new_config.local_IP);
+  printf("config local IP:%s", new_config->local_IP);
 
   if (config.sender) {
   }
