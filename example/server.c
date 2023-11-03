@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
   serv_cli_config_t new_config;
   memcpy(&new_config, payload_buf, sizeof(serv_cli_config_t));
 
-  printf("config knownIP:%d local IP:%s separateTXRX:%d\n", new_config.known_IP,
+  printf("config knownIP:%d local IP:%s separateTXRX:%d\n", new_config.IP_known,
          new_config.local_IP, new_config.separate_txrx);
 
   if (config.sender) {
