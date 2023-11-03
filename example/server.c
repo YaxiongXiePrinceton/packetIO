@@ -73,10 +73,11 @@ int main(int argc, char **argv) {
 
   pkt_header_t pkt_header;
   char pkt_buf[1500];
+  int pkt_size;
+  pkt_size = packet_generate(pkt_buf, &pkt_header, (void *)&config,
+                             sizeof(serv_cli_config_t));
 
-  packet_generate(pkt_buf, &pkt_header, (void *)&config,
-                  sizeof(serv_cli_config_t));
-
+  printf("pkt size:%d \n", pkt_size);
   if (config.sender) {
   }
   return 0;
