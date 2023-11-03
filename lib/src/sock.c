@@ -47,6 +47,48 @@ bool sock_same_sock_addr(struct sockaddr_in *a, struct sockaddr_in *b) {
   return false;
 }
 
+/* Create a UDP socket with IP and port */
+/* if the port is zero, then we didn't bind the socket to any IP and port */
+int sock_create_udp_socket(char IP[40], int port) {
+  int sockfd;
+  struct sockaddr_in servaddr;
+
+  // Create UDP socket
+  sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+  if (sockfd < 0) {
+    perror("socket creation failed");
+    exit(EXIT_FAILURE);
+  }
+
+  sock_setnonblocking(sockfd);
+
+  if (port > 0) {
+    // Set IP address
+    memset(&servaddr, 0, sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_port = htons(port);
+
+    /* if the IP address is not empty */
+    if (strlen(IP) > 3) {
+      // servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");//服务器IP地址
+      if (inet_pton(AF_INET, IP, &(servaddr.sin_addr)) <= 0) {
+        perror("Invalid IP address");
+        exit(EXIT_FAILURE);
+      }
+    } else {
+      /* any IP are valid -- equals to 0.0.0.0*/
+      servaddr.sin_addr.s_addr = INADDR_ANY;
+    }
+    // Bind socket to server address
+    if (bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) <
+        0) {
+      perror("bind failed");
+      exit(EXIT_FAILURE);
+    }
+  }
+  return sockfd;
+}
+
 int sock_connectServer_w_config_udp(char serv_IP[40], int serv_port) {
   int sockfd;
   char buffer[1400];
@@ -66,6 +108,7 @@ int sock_connectServer_w_config_udp(char serv_IP[40], int serv_port) {
   servaddr.sin_family = AF_INET;
   servaddr.sin_port = htons(serv_port);
   // servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");//服务器IP地址
+  //
   if (inet_pton(AF_INET, serv_IP, &(servaddr.sin_addr)) <= 0) {
     perror("Invalid server IP address");
     exit(EXIT_FAILURE);
@@ -145,5 +188,3 @@ struct sockaddr_in sock_create_serv_addr(char serv_IP[40], int serv_port) {
 
   return servaddr;
 }
-
-
