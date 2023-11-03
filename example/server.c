@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
     nat_punch_client(sock_fd, remote_addr);
   }
 
-  if (sender) {
+  if (config.sender) {
   }
   return 0;
 }
