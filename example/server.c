@@ -87,8 +87,8 @@ int main(int argc, char **argv) {
   char payload_buf[1500];
   packet_decompose(pkt_buf, pkt_size, &new_pkt_header, payload_buf);
 
-  serv_cli_config_t *new_config;
-  new_config = (serv_cli_config_t *)payload_buf;
+  serv_cli_config_t new_config;
+  memcpy(&new_config, payload_buf, sizeof(serv_cli_config_t));
 
   printf("config local IP:%s", new_config->local_IP);
 
