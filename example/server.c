@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
   serv_cli_config_t new_config;
   memcpy(&new_config, payload_buf, sizeof(serv_cli_config_t));
 
-  printf("config local IP:%s", new_config->local_IP);
+  printf("config local IP:%s", new_config.local_IP);
 
   if (config.sender) {
   }
