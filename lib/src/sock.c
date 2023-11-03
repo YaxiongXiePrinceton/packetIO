@@ -62,6 +62,7 @@ int sock_create_udp_socket(char IP[40], int port) {
 
   sock_setnonblocking(sockfd);
 
+  printf("IP is:%s", IP);
   if (port > 0) {
     // Set IP address
     memset(&servaddr, 0, sizeof(servaddr));
