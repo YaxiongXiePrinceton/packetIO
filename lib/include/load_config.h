@@ -33,7 +33,7 @@ typedef struct {
   int IP_known;
   char local_IP[40];
   char remote_IP[40];
-  bool separate_txrx;
+  int separate_txrx;
   pkt_sent_config_t pkt_sent_config;
   pkt_recv_config_t pkt_recv_config;
 } serv_cli_config_t;
