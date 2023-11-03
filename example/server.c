@@ -17,6 +17,7 @@
 #include <unistd.h>
 
 #include "load_config.h"
+#include "nat_punch.h"
 #include "sock.h"
 
 int main(int argc, char **argv) {
