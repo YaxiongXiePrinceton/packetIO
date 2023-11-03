@@ -57,20 +57,25 @@ int main(int argc, char **argv) {
   sock_fd =
       sock_create_udp_socket(config.local_IP, config.pkt_recv_config.recv_port);
 
-  struct sockaddr_in remote_addr;
-  // now we need to figure out the remote addr
-  if (config.IP_known) {
-    // 1, if our local device has a public IP address, then we should be the
-    // server and we should wait for the remote to send packets to us from the
-    // packets, we could derive the remote user's IP
-    remote_addr = nat_punch_server(sock_fd);
-  } else {
-    // 2, if our local device has no public IP address, then we must know the
-    // IP address of the remote deivce, we should let the remote know our IP
-    remote_addr = sock_create_serv_addr(config.remote_IP, config.remote_port);
-    nat_punch_client(sock_fd, remote_addr);
-  }
-
+  /* struct sockaddr_in remote_addr; */
+  /* // now we need to figure out the remote addr */
+  /* if (config.IP_known) { */
+  /*   // 1, if our local device has a public IP address, then we should be the
+   */
+  /*   // server and we should wait for the remote to send packets to us from
+   * the */
+  /*   // packets, we could derive the remote user's IP */
+  /*   remote_addr = nat_punch_server(sock_fd); */
+  /* } else { */
+  /*   // 2, if our local device has no public IP address, then we must know the
+   */
+  /*   // IP address of the remote deivce, we should let the remote know our IP
+   */
+  /*   remote_addr = sock_create_serv_addr(config.remote_IP,
+   * config.remote_port); */
+  /*   nat_punch_client(sock_fd, remote_addr); */
+  /* } */
+  /**/
   pkt_header_t pkt_header;
   char pkt_buf[1500];
   int pkt_size;
