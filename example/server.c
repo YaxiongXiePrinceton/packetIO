@@ -86,6 +86,7 @@ int main(int argc, char **argv) {
   pkt_header_t new_pkt_header;
   char payload_buf[1500];
   packet_decompose(pkt_buf, pkt_size, &new_pkt_header, payload_buf);
+  printf("decompese done!\n");
 
   serv_cli_config_t new_config;
   memcpy(&new_config, payload_buf, sizeof(serv_cli_config_t));
