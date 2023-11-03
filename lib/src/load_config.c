@@ -58,10 +58,25 @@ int packetIO_read_config(serv_cli_config_t *config, char *path) {
   strcpy(config->remote_IP, remote_IP);
   printf("CONFIG -> remote IP: %s\n", config->remote_IP);
 
+  if (!config_lookup_int(cfg, "remote_port", &config->remote_port)) {
+    printf("ERROR: reading remote_port\n");
+  }
+  printf("CONFIG -> remote_port: %d\n", config->remote_port);
+
+  if (!config_lookup_int(cfg, "local_port", &config->local_port)) {
+    printf("ERROR: reading local_port\n");
+  }
+  printf("CONFIG -> local_port: %d\n", config->local_port);
+
   if (!config_lookup_bool(cfg, "separate_txrx", &config->separate_txrx)) {
     printf("ERROR: reading separate_txrx\n");
   }
   printf("CONFIG -> separate_txrx:%d\n", config->separate_txrx);
+
+  if (!config_lookup_bool(cfg, "sender", &config->sender)) {
+    printf("ERROR: reading sender\n");
+  }
+  printf("CONFIG -> sender:%d\n", config->sender);
 
   /********************** END of IP related ***********************/
 

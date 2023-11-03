@@ -1,5 +1,5 @@
-#ifndef _CONFIG_H_
-#define _CONFIG_H_
+#ifndef LOAD_CONFIG_H
+#define LOAD_CONFIG_H
 #include <stdio.h>
 #ifdef __cplusplus
 extern "C" {
@@ -33,7 +33,13 @@ typedef struct {
   int IP_known;
   char local_IP[40];
   char remote_IP[40];
-  int separate_txrx;
+  int remote_port;
+  int local_port;
+  int separate_txrx; // do we use separate socket for transmit and receive?
+  int sender;        // are we the sender? yes, 1; no 0
+
+  // the detailed configurations only works if we use separatte txrx
+  // otherwise, we use the above configurations to create the socket
   pkt_sent_config_t pkt_sent_config;
   pkt_recv_config_t pkt_recv_config;
 } serv_cli_config_t;

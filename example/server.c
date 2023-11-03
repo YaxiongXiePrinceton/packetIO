@@ -51,20 +51,25 @@ int main(int argc, char **argv) {
   bool pkt_recv = config.pkt_recv_config.recv_pkt;
   bool recv_port = config.pkt_recv_config.recv_port;
 
-  int sock_fd[2] = {0}; // the first socket is for recv and 2nd for send
+  int sock_fd = 0;
+  sock_fd =
+      sock_create_udp_socket(config.local_IP, config.pkt_recv_config.recv_port);
 
-  if (pkt_recv)
-    sock_fd[0] = sock_create_udp_socket(config.local_IP,
-                                        config.pkt_recv_config.recv_port);
-  if (send_port != recv_port && pkt_send)
-    sock_fd[1] = sock_create_udp_socket(config.local_IP,
-                                        config.pkt_sent_config.send_port);
-  // if our current IP is known
+  struct sockaddr_in remote_addr;
+  // now we need to figure out the remote addr
   if (config.IP_known) {
-    // We should be the NAT server
+    // 1, if our local device has a public IP address, then we should be the
+    // server and we should wait for the remote to send packets to us from the
+    // packets, we could derive the remote user's IP
+    remote_addr = nat_punch_server(sock_fd);
   } else {
-    // We should be the NAT client
+    // 2, if our local device has no public IP address, then we must know the
+    // IP address of the remote deivce, we should let the remote know our IP
+    remote_addr = sock_create_serv_addr(config.remote_IP, config.remote_port);
+    nat_punch_client(sock_fd, remote_addr);
   }
 
+  if (sender) {
+  }
   return 0;
 }

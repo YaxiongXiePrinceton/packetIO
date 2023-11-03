@@ -1,5 +1,5 @@
-#ifndef SOCK_H
-#define SOCK_H
+#ifndef NAT_PUNCH_H
+#define NAT_PUNCH_H
 #include <arpa/inet.h>
 #include <assert.h>
 #include <errno.h>
@@ -22,15 +22,11 @@
 extern "C" {
 #endif
 
-void sock_setnonblocking(int sockfd);
-bool sock_same_sock_addr(struct sockaddr_in *a, struct sockaddr_in *b);
-int sock_connectServer_w_config_udp(char serv_IP[40], int serv_port);
-
-int sock_create_udp_socket(char IP[40], int port);
-int sock_close_and_notify_udp(int sockfd);
-struct sockaddr_in sock_create_serv_addr(char serv_IP[40], int serv_port);
+struct sockaddr_in nat_punch_server(int sock_fd);
+int nat_punch_client(int sock_fd, struct sockaddr_in serv_addr);
 
 #ifdef __cplusplus
 }
 #endif
+
 #endif
