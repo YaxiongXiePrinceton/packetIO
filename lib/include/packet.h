@@ -38,6 +38,8 @@ typedef struct {
 
 int packet_generate(char pkt_buf[1500], pkt_header_t *pkt_header, void *payload,
                     int payload_size);
+int packet_generate_wSize(char pkt_buf[1500], pkt_header_t *pkt_header,
+                          int payload_size);
 
 int packet_decompose(char pkt_buf[1500], int pkt_size, pkt_header_t *pkt_header,
                      char payload_buf[1500]);

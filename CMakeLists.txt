@@ -1,7 +1,7 @@
 ################################################################################
 ### Selecting CMake minimum version
 
-CMAKE_MINIMUM_REQUIRED (VERSION 3.12)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.10)
 
 ################################################################################
 ### Setting Global Parameters

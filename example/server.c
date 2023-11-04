@@ -75,18 +75,24 @@ int main(int argc, char **argv) {
   /*   nat_punch_client(sock_fd, remote_addr); */
   /* } */
   /**/
+
   pkt_header_t pkt_header;
+  memset(&pkt_header, 0, sizeof(pkt_header_t));
+
+  pkt_header.sequence_number = 1010;
   char pkt_buf[1500];
   int pkt_size;
+
+  printf("header size:%d payload_size:%d \n", sizeof(pkt_header_t),
+         sizeof(serv_cli_config_t));
   pkt_size = packet_generate(pkt_buf, &pkt_header, (void *)&config,
                              sizeof(serv_cli_config_t));
 
-  printf("pkt size:%d \n", pkt_size);
-
   pkt_header_t new_pkt_header;
+
   char payload_buf[1500];
   packet_decompose(pkt_buf, pkt_size, &new_pkt_header, payload_buf);
-  printf("decompese done!\n");
+  printf("decompese done! header_seq:%d\n", new_pkt_header.sequence_number);
 
   serv_cli_config_t new_config;
   memcpy(&new_config, payload_buf, sizeof(serv_cli_config_t));
