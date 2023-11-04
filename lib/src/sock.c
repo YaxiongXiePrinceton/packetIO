@@ -60,7 +60,7 @@ int sock_create_udp_socket(char IP[40], int port) {
     exit(EXIT_FAILURE);
   }
 
-  sock_setnonblocking(sockfd);
+  // sock_setnonblocking(sockfd);
 
   printf("IP is:%s\n", IP);
 

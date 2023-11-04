@@ -16,6 +16,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+#include "connection.h"
 #include "load_config.h"
 #include "nat_punch.h"
 #include "packet.h"
@@ -56,50 +57,41 @@ int main(int argc, char **argv) {
   int sock_fd = 0;
   sock_fd = sock_create_udp_socket(config.local_IP, config.local_port);
 
-  /* struct sockaddr_in remote_addr; */
-  /* // now we need to figure out the remote addr */
-  /* if (config.IP_known) { */
-  /*   // 1, if our local device has a public IP address, then we should be the
-   */
-  /*   // server and we should wait for the remote to send packets to us from
-   * the */
-  /*   // packets, we could derive the remote user's IP */
-  /*   remote_addr = nat_punch_server(sock_fd); */
-  /* } else { */
-  /*   // 2, if our local device has no public IP address, then we must know the
-   */
-  /*   // IP address of the remote deivce, we should let the remote know our IP
-   */
-  /*   remote_addr = sock_create_serv_addr(config.remote_IP,
-   * config.remote_port); */
-  /*   nat_punch_client(sock_fd, remote_addr); */
-  /* } */
+  struct sockaddr_in remote_addr;
+  // now we need to figure out the remote addr
+  if (config.connect_starter) {
+    sock_create_udp_socket(config.remote_IP, config.remote_port);
+    connection_starter(sock_fd, remote_addr);
+  } else {
+    remote_addr = connection_responder(sock_fd);
+  }
+
+  /* pkt_header_t pkt_header; */
+  /* memset(&pkt_header, 0, sizeof(pkt_header_t)); */
   /**/
-
-  pkt_header_t pkt_header;
-  memset(&pkt_header, 0, sizeof(pkt_header_t));
-
-  pkt_header.sequence_number = 1010;
-  char pkt_buf[1500];
-  int pkt_size;
-
-  printf("header size:%d payload_size:%d \n", sizeof(pkt_header_t),
-         sizeof(serv_cli_config_t));
-  pkt_size = packet_generate(pkt_buf, &pkt_header, (void *)&config,
-                             sizeof(serv_cli_config_t));
-
-  pkt_header_t new_pkt_header;
-
-  char payload_buf[1500];
-  packet_decompose(pkt_buf, pkt_size, &new_pkt_header, payload_buf);
-  printf("decompese done! header_seq:%d\n", new_pkt_header.sequence_number);
-
-  serv_cli_config_t new_config;
-  memcpy(&new_config, payload_buf, sizeof(serv_cli_config_t));
-
-  printf("config knownIP:%d local IP:%s separateTXRX:%d\n", new_config.IP_known,
-         new_config.local_IP, new_config.separate_txrx);
-
+  /* pkt_header.sequence_number = 1010; */
+  /* char pkt_buf[1500]; */
+  /* int pkt_size; */
+  /**/
+  /* printf("header size:%d payload_size:%d \n", sizeof(pkt_header_t), */
+  /*        sizeof(serv_cli_config_t)); */
+  /* pkt_size = packet_generate(pkt_buf, &pkt_header, (void *)&config, */
+  /*                            sizeof(serv_cli_config_t)); */
+  /**/
+  /* pkt_header_t new_pkt_header; */
+  /**/
+  /* char payload_buf[1500]; */
+  /* packet_decompose(pkt_buf, pkt_size, &new_pkt_header, payload_buf); */
+  /* printf("decompese done! header_seq:%d\n", new_pkt_header.sequence_number);
+   */
+  /**/
+  /* serv_cli_config_t new_config; */
+  /* memcpy(&new_config, payload_buf, sizeof(serv_cli_config_t)); */
+  /**/
+  /* printf("config knownIP:%d local IP:%s separateTXRX:%d\n",
+   * new_config.IP_known, */
+  /*        new_config.local_IP, new_config.separate_txrx); */
+  /**/
   if (config.sender) {
   }
   return 0;

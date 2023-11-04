@@ -26,15 +26,16 @@ typedef struct {
 } pkt_recv_config_t;
 
 /* The configurations for server and client */
-/* IP_known: is the local device's public IP known? NAT related */
+/* NAT_client: is the local device's public IP known? if not, its a NAT client*/
 /* local_IP: the IP of the local device */
 /* remote_IP: the IP of the remote device */
 typedef struct {
-  int IP_known;
+  int connect_starter;
   char local_IP[40];
   char remote_IP[40];
   int remote_port;
   int local_port;
+
   int separate_txrx; // do we use separate socket for transmit and receive?
   int sender;        // are we the sender? yes, 1; no 0
 

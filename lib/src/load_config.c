@@ -33,10 +33,10 @@ int packetIO_read_config(serv_cli_config_t *config, char *path) {
   }
 
   /********************** IP related *****************************/
-  if (!config_lookup_bool(cfg, "IP_known", &config->IP_known)) {
-    printf("ERROR: reading IP_known\n");
+  if (!config_lookup_bool(cfg, "connect_starter", &config->connect_starter)) {
+    printf("ERROR: reading connect_starter\n");
   }
-  printf("CONFIG -> IP_known:%d\n", config->IP_known);
+  printf("CONFIG -> connect_starter:%d\n", config->connect_starter);
 
   /* Empty the local and remote IP address*/
   memset(config->remote_IP, '\0', sizeof(config->remote_IP));
