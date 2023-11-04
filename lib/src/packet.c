@@ -37,8 +37,8 @@ int packet_generate(char pkt_buf[1500], pkt_header_t *pkt_header, void *payload,
 
 /* generate the packet using the packet header and packet size*/
 /* the total packet size (including the packet header) equals the input size*/
-int packet_generate(char pkt_buf[1500], pkt_header_t *pkt_header,
-                    int pkt_all_size) {
+int packet_generate_wSize(char pkt_buf[1500], pkt_header_t *pkt_header,
+                          int pkt_all_size) {
   int pkt_size = 0;
 
   /* Copy the packet header */
