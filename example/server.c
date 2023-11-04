@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
   struct sockaddr_in remote_addr;
   // now we need to figure out the remote addr
   if (config.connect_starter) {
-    sock_create_udp_socket(config.remote_IP, config.remote_port);
+    remote_addr = sock_create_serv_addr(config.remote_IP, config.remote_port);
     connection_starter(sock_fd, remote_addr);
   } else {
     remote_addr = connection_responder(sock_fd);
