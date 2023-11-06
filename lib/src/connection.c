@@ -44,7 +44,7 @@ int connection_starter(int sock_fd, struct sockaddr_in remote_addr) {
       //        serv_addr.sin_port, recvLen, recvBuf[0], recvBuf[1]);
       //  we recevie the connection request from client
       if (sock_cmd_identify_pkt_type(recvBuf) == CON_ACK) {
-        printf("CONNECTION Starter: Received CMD-type: CON_REQUEST\n");
+        printf("CONNECTION Starter: Received CMD-type: CON_ACK\n");
         recvPkt++;
       }
     }
@@ -54,6 +54,7 @@ int connection_starter(int sock_fd, struct sockaddr_in remote_addr) {
       break;
     }
   }
+  printf("CONNECTION Starter: Connection Establish!\n");
 
   return 0;
 }
@@ -93,5 +94,6 @@ struct sockaddr_in connection_responder(int sock_fd) {
     printf("Connection Responder: ERROR: CONNECTION ACK SENT Failed!\n");
   }
 
+  printf("CONNECTION Responder: Connection Establish!\n");
   return cli_addr;
 }
