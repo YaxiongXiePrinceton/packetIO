@@ -35,10 +35,10 @@ int sock_cmd_print_type(sock_cmd_type_t pkt_type) {
 }
 
 sock_cmd_type_t sock_cmd_identify_pkt_type(char *buf) {
-  for (int i = 0; i < 4; i++) {
-    printf("%02x", buf[i]);
-  }
-  printf("\n");
+  // for (int i = 0; i < 4; i++) {
+  //   printf("%02x", buf[i]);
+  /* } */
+  // printf("\n");
   if (buf[0] == (char)CON_REQUEST && buf[1] == (char)CON_REQUEST &&
       buf[2] == (char)CON_REQUEST && buf[3] == (char)CON_REQUEST) {
     return CON_REQUEST;

@@ -58,6 +58,13 @@ int main(int argc, char **argv) {
   bool pkt_recv = config.pkt_recv_config.recv_pkt;
   bool recv_port = config.pkt_recv_config.recv_port;
 
+  pkt_tx_config_t pkt_tx_config;
+  pkt_tx_config.pkt_size = config.pkt_sent_config.pkt_size;
+  pkt_tx_config.pkt_num = config.pkt_sent_config.pkt_send_num;
+  pkt_tx_config.pkt_interval = config.pkt_sent_config.pkt_send_int_us;
+
+  printf("SEND %d PACKETS!\n", pkt_tx_config.pkt_size);
+
   int sock_fd = 0;
   sock_fd = sock_create_udp_socket(config.local_IP, config.local_port);
 
@@ -69,12 +76,6 @@ int main(int argc, char **argv) {
   } else {
     remote_addr = connection_responder(sock_fd);
   }
-
-  pkt_tx_config_t pkt_tx_config;
-  pkt_tx_config.pkt_size = config.pkt_sent_config.pkt_size;
-  pkt_tx_config.pkt_num = config.pkt_sent_config.pkt_send_num;
-  pkt_tx_config.pkt_interval = config.pkt_sent_config.pkt_send_int_us;
-
   if (config.sender) {
     // let's send the packets
     sock_pkt_send_multi_w_config(sock_fd, remote_addr, pkt_tx_config, fd);

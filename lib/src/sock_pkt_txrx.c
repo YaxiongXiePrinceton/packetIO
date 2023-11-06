@@ -81,8 +81,9 @@ int sock_pkt_recv_single(int sock_fd, struct sockaddr_in remote_addr,
                (struct sockaddr *)&serv_addr, &len);
 
   if (n > 0) {
-    printf("PORT: %d recv len:%d | %d %d \n", serv_addr.sin_port, n, recvBuf[0],
-           recvBuf[1]);
+    /* printf("PORT: %d recv len:%d | %d %d \n", serv_addr.sin_port, n,
+     * recvBuf[0], */
+    /* recvBuf[1]); */
     memcpy(pkt, recvBuf, n);
   }
 
