@@ -75,6 +75,7 @@ int main(int argc, char **argv) {
 
   if (config.sender) {
     sock_pkt_send_multi_w_config(sock_fd, remote_addr, pkt_tx_config);
+
   } else {
     // receiver
     sock_pkt_recv_multi_no_output(sock_fd, remote_addr);

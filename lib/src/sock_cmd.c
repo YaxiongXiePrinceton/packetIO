@@ -48,6 +48,21 @@ int sock_cmd_generate_pkt_type(char buf[4], sock_cmd_type_t type) {
   }
   return 1;
 }
+int sock_cmd_sent_w_type(int sock_fd, struct sockaddr_in remote_addr,
+                         sock_cmd_type_t pkt_type) {
+  char recvBuf[1400];
+
+  if (sock_cmd_generate_pkt_type(recvBuf, CON_REQUEST)) {
+    sendto(sock_fd, (char *)recvBuf, 4, 0,
+           (const struct sockaddr *)&remote_addr, sizeof(remote_addr));
+    sendto(sock_fd, (char *)recvBuf, 4, 0,
+           (const struct sockaddr *)&remote_addr, sizeof(remote_addr));
+  } else {
+    return -1;
+  }
+  return 1;
+}
+
 int sock_cmd_print_type(sock_cmd_type_t pkt_type) {
   switch (pkt_type) {
   case CON_REQUEST:

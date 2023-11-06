@@ -21,18 +21,14 @@
 #include "sock_cmd.h"
 #include "time_stamp.h"
 // Send packets to the remote
-int connection_starter(int sock_fd, struct sockaddr_in serv_addr) {
+//
+int connection_starter(int sock_fd, struct sockaddr_in remote_addr) {
   char recvBuf[1400];
 
-  sock_cmd_generate_pkt_type(recvBuf, CON_REQUEST);
+  // send the request command
+  sock_cmd_sent_w_type(sock_fd, remote_addr, CON_REQUEST);
 
-  printf("STARTER: tx buf %d %d\n", recvBuf[0], recvBuf[1]);
-
-  sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&serv_addr,
-         sizeof(serv_addr));
-  sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&serv_addr,
-         sizeof(serv_addr));
-
+  struct sockaddr_in serv_addr;
   int recvLen = 0, recvPkt = 0;
   int len = sizeof(serv_addr);
   int64_t curr_t, start_t = timestamp_ms();
@@ -90,13 +86,17 @@ struct sockaddr_in connection_responder(int sock_fd) {
     }
   }
 
+  sock_cmd_sent_w_type(sock_fd, cli_addr, CON_ACK);
+
   // Generate and Send acks back to the starter
-  sock_cmd_generate_pkt_type(recvBuf, CON_ACK);
-  printf("Responder: tx buf %d %d\n", recvBuf[0], recvBuf[1]);
-  sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,
-         sizeof(cli_addr));
-  sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,
-         sizeof(cli_addr));
+  /* sock_cmd_generate_pkt_type(recvBuf, CON_ACK); */
+  /* printf("Responder: tx buf %d %d\n", recvBuf[0], recvBuf[1]); */
+  /* sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,
+   */
+  /* sizeof(cli_addr)); */
+  /* sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,
+   */
+  /* sizeof(cli_addr)); */
 
   return cli_addr;
 }

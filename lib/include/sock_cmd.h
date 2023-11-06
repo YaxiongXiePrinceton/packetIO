@@ -30,6 +30,8 @@ typedef enum {
 
 sock_cmd_type_t sock_cmd_identify_pkt_type(char buf[4]);
 int sock_cmd_generate_pkt_type(char buf[4], sock_cmd_type_t type);
+int sock_cmd_sent_w_type(int sock_fd, struct sockaddr_in remote_addr,
+                         sock_cmd_type_t pkt_type);
 
 int sock_cmd_print_type(sock_cmd_type_t pkt_type);
 #ifdef __cplusplus
