@@ -74,10 +74,10 @@ int main(int argc, char **argv) {
   pkt_tx_config.pkt_interval = 100;
 
   if (config.sender) {
-    // sock_pkt_send_multi_w_config(sock_fd, remote_addr, pkt_tx_config);
+    sock_pkt_send_multi_w_config(sock_fd, remote_addr, pkt_tx_config);
   } else {
     // receiver
-    // sock_pkt_recv_multi_no_output(sock_fd, remote_addr);
+    sock_pkt_recv_multi_no_output(sock_fd, remote_addr);
   }
 
   return 0;
