@@ -17,7 +17,22 @@
 #include <unistd.h>
 
 #include "sock_cmd.h"
-
+int sock_cmd_print_type(sock_cmd_type_t pkt_type) {
+  switch (pkt_type) {
+  case CON_REQUEST:
+    printf("CON REQUEST \n");
+    break;
+  case CON_CLOSE:
+    printf("CON CLOSE \n");
+    break;
+  case DATA:
+    printf("DATA \n");
+    break;
+  default:
+    printf("UNKNOWN TYPE! \n");
+    break;
+  }
+}
 sock_cmd_type_t sock_cmd_identify_pkt_type(char *buf) {
   for (int i = 0; i < 4; i++) {
     printf("%02x", buf[i]);
@@ -52,6 +67,9 @@ int sock_cmd_sent_w_type(int sock_fd, struct sockaddr_in remote_addr,
                          sock_cmd_type_t pkt_type) {
   char recvBuf[1400];
 
+  printf("SCK_CMD_SEND: type: ");
+  sock_cmd_print_type(pkt_type);
+
   if (sock_cmd_generate_pkt_type(recvBuf, pkt_type)) {
     sendto(sock_fd, (char *)recvBuf, 4, 0,
            (const struct sockaddr *)&remote_addr, sizeof(remote_addr));
@@ -61,21 +79,4 @@ int sock_cmd_sent_w_type(int sock_fd, struct sockaddr_in remote_addr,
     return -1;
   }
   return 1;
-}
-
-int sock_cmd_print_type(sock_cmd_type_t pkt_type) {
-  switch (pkt_type) {
-  case CON_REQUEST:
-    printf("CON REQUEST \n");
-    break;
-  case CON_CLOSE:
-    printf("CON CLOSE \n");
-    break;
-  case DATA:
-    printf("DATA \n");
-    break;
-  default:
-    printf("UNKNOWN TYPE! \n");
-    break;
-  }
 }
