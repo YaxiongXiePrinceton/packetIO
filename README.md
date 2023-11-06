@@ -3,7 +3,7 @@ This is the library for general Packet IO processing.
 /lib is the source code of the library
 /example is the source code of the example application that leverages the library
 
-*** Installation ***
+***Installation***
 
 Runing the following commands To install the library:
 
