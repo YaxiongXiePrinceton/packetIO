@@ -18,8 +18,6 @@
 #include <unistd.h>
 
 #include "connection.h"
-
-// NAT punch client
 // Send packets to the remote
 int connection_starter(int sock_fd, struct sockaddr_in serv_addr) {
   char recvBuf[1400];
@@ -38,6 +36,7 @@ int connection_starter(int sock_fd, struct sockaddr_in serv_addr) {
   int len = sizeof(serv_addr);
   // Waiting for the packets from the starter
   while (true) {
+
     // recv data from client and get the client address
     n = recvfrom(sock_fd, (char *)recvBuf, 1400, MSG_WAITALL,
                  (struct sockaddr *)&serv_addr, &len);
@@ -54,7 +53,7 @@ int connection_starter(int sock_fd, struct sockaddr_in serv_addr) {
 
   return 0;
 }
-
+// The responder
 struct sockaddr_in connection_responder(int sock_fd) {
   char recvBuf[1400];
   unsigned int len = 0;

@@ -22,6 +22,9 @@
 extern "C" {
 #endif
 
+int sock_pkt_send_single(int sock_fd, struct sockaddr_in remote_addr, char *pkt,
+                         int pkt_size);
+
 #ifdef __cplusplus
 }
 #endif

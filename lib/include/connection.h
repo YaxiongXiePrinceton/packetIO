@@ -21,7 +21,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 int connection_starter(int sock_fd, struct sockaddr_in serv_addr);
 struct sockaddr_in connection_responder(int sock_fd);
 

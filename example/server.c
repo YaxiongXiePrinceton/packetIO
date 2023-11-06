@@ -21,6 +21,7 @@
 #include "nat_punch.h"
 #include "packet.h"
 #include "sock.h"
+#include "sock_pkt_txrx.h"
 
 int main(int argc, char **argv) {
   int c;
@@ -93,6 +94,15 @@ int main(int argc, char **argv) {
   /*        new_config.local_IP, new_config.separate_txrx); */
   /**/
   if (config.sender) {
+    pkt_header_t pkt_header;
+    memset(&pkt_header, 0, sizeof(pkt_header_t));
+    pkt_header.sequence_number = 1010;
+    char pkt_buf[1500];
+    int pkt_size;
+    pkt_size = packet_generate(pkt_buf, &pkt_header, (void *)&config,
+                               sizeof(serv_cli_config_t));
+
+    sock_pkt_send_single(sock_fd, remote_addr, pkt_buf, pkt_size);
   }
   return 0;
 }

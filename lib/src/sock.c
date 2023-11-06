@@ -16,6 +16,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+#include "sock.h"
 // set sock in non-block mode
 void sock_setnonblocking(int sockfd) {
   int flag = fcntl(sockfd, F_GETFL, 0);
@@ -28,6 +29,18 @@ void sock_setnonblocking(int sockfd) {
     perror("fcntl F_SETFL fail");
   }
   return;
+}
+
+sock_cmd_type_t sock_identify_pkt_type(char *buf) {
+  if (buf[0] == CON_REQUEST && buf[1] == CON_REQUEST && buf[2] == CON_REQUEST &&
+      buf[3] == CON_REQUEST) {
+    return CON_REQUEST;
+  } else if (buf[0] == CON_CLOSE && buf[1] == CON_CLOSE &&
+             buf[2] == CON_CLOSE && buf[3] == CON_CLOSE) {
+    return CON_CLOSE;
+  } else {
+    return DATA;
+  }
 }
 
 // check whether two socks are the same
