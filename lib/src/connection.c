@@ -86,17 +86,19 @@ struct sockaddr_in connection_responder(int sock_fd) {
     }
   }
 
-  sock_cmd_sent_w_type(sock_fd, cli_addr, CON_ACK);
+  if (sock_cmd_sent_w_type(sock_fd, cli_addr, CON_ACK)) {
+    printf("CONNECTION ACK SENT!\n");
+  } else {
+    printf("ERROR: CONNECTION ACK SENT Failed!\n");
+  }
 
   // Generate and Send acks back to the starter
-  /* sock_cmd_generate_pkt_type(recvBuf, CON_ACK); */
-  /* printf("Responder: tx buf %d %d\n", recvBuf[0], recvBuf[1]); */
-  /* sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,
-   */
-  /* sizeof(cli_addr)); */
-  /* sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,
-   */
-  /* sizeof(cli_addr)); */
+  //  sock_cmd_generate_pkt_type(recvBuf, CON_ACK);
+  // printf("Responder: tx buf %d %d\n", recvBuf[0], recvBuf[1]);
+  // sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,
+  //       sizeof(cli_addr));
+  // sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,
+  //       sizeof(cli_addr));
 
   return cli_addr;
 }

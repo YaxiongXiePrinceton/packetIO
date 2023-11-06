@@ -74,8 +74,11 @@ int main(int argc, char **argv) {
   pkt_tx_config.pkt_interval = 100;
 
   if (config.sender) {
+    // let's send the packets
     sock_pkt_send_multi_w_config(sock_fd, remote_addr, pkt_tx_config);
 
+    // after sending the packets, let's close the connection.
+    sock_cmd_sent_w_type(sock_fd, remote_addr, CON_CLOSE);
   } else {
     // receiver
     sock_pkt_recv_multi_no_output(sock_fd, remote_addr);

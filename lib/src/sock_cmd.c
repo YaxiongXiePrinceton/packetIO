@@ -52,7 +52,7 @@ int sock_cmd_sent_w_type(int sock_fd, struct sockaddr_in remote_addr,
                          sock_cmd_type_t pkt_type) {
   char recvBuf[1400];
 
-  if (sock_cmd_generate_pkt_type(recvBuf, CON_REQUEST)) {
+  if (sock_cmd_generate_pkt_type(recvBuf, pkt_type)) {
     sendto(sock_fd, (char *)recvBuf, 4, 0,
            (const struct sockaddr *)&remote_addr, sizeof(remote_addr));
     sendto(sock_fd, (char *)recvBuf, 4, 0,
