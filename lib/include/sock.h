@@ -29,6 +29,7 @@ typedef enum {
 } sock_cmd_type_t;
 
 sock_cmd_type_t sock_identify_pkt_type(char buf[4]);
+int sock_generate_pkt_type(char buf[4], sock_cmd_type_t type);
 
 void sock_setnonblocking(int sockfd);
 bool sock_same_sock_addr(struct sockaddr_in *a, struct sockaddr_in *b);

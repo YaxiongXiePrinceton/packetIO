@@ -43,6 +43,17 @@ sock_cmd_type_t sock_identify_pkt_type(char *buf) {
   }
 }
 
+int sock_generate_pkt_type(char buf[4], sock_cmd_type_t type) {
+  if (type == CON_REQUEST || type == CON_CLOSE) {
+    for (int i = 0; i < 4; i++) {
+      buf[i] = (char)type;
+      return 1;
+    }
+  } else {
+    printf("ERROR: Unkown or Incorrect Packet Type!\n");
+    return -1;
+  }
+}
 // check whether two socks are the same
 bool sock_same_sock_addr(struct sockaddr_in *a, struct sockaddr_in *b) {
   if (a->sin_family == b->sin_family && a->sin_port == b->sin_port) {

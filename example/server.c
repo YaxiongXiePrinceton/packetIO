@@ -67,55 +67,46 @@ int main(int argc, char **argv) {
     remote_addr = connection_responder(sock_fd);
   }
 
-  /* pkt_header_t pkt_header; */
-  /* memset(&pkt_header, 0, sizeof(pkt_header_t)); */
-  /**/
-  /* pkt_header.sequence_number = 1010; */
-  /* char pkt_buf[1500]; */
-  /* int pkt_size; */
-  /**/
-  /* printf("header size:%d payload_size:%d \n", sizeof(pkt_header_t), */
-  /*        sizeof(serv_cli_config_t)); */
-  /* pkt_size = packet_generate(pkt_buf, &pkt_header, (void *)&config, */
-  /*                            sizeof(serv_cli_config_t)); */
-  /**/
-  /* pkt_header_t new_pkt_header; */
-  /**/
-  /* char payload_buf[1500]; */
-  /* packet_decompose(pkt_buf, pkt_size, &new_pkt_header, payload_buf); */
-  /* printf("decompese done! header_seq:%d\n", new_pkt_header.sequence_number);
-   */
-  /**/
-  /* serv_cli_config_t new_config; */
-  /* memcpy(&new_config, payload_buf, sizeof(serv_cli_config_t)); */
-  /**/
-  /* printf("config knownIP:%d local IP:%s separateTXRX:%d\n",
-   * new_config.IP_known, */
-  /*        new_config.local_IP, new_config.separate_txrx); */
-  /**/
-
   if (config.sender) {
     // sender
-    pkt_header_t pkt_header;
-    memset(&pkt_header, 0, sizeof(pkt_header_t));
-    pkt_header.sequence_number = 1010;
+    // pkt_header_t pkt_header;
+    // memset(&pkt_header, 0, sizeof(pkt_header_t));
+    // pkt_header.sequence_number = 1010;
     char pkt_buf[1500];
     int pkt_size;
-    pkt_size = packet_generate(pkt_buf, &pkt_header, (void *)&config,
-                               sizeof(serv_cli_config_t));
 
+    /* pkt_size = packet_generate(pkt_buf, &pkt_header, (void *)&config, */
+    /*                            sizeof(serv_cli_config_t)); */
+    sock_generate_pkt_type(pkt_buf, CON_REQUEST);
+    pkt_size = 4;
     sock_pkt_send_single(sock_fd, remote_addr, pkt_buf, pkt_size);
   } else {
     // receiver
     char pkt_buf[1500];
     int pkt_size = 0;
     pkt_size = sock_pkt_recv_single(sock_fd, remote_addr, pkt_buf);
-    pkt_header_t pkt_header;
-    char payload_buf[1500];
-    packet_decompose(pkt_buf, pkt_size, &pkt_header, payload_buf);
-    serv_cli_config_t new_config;
-    memcpy(&new_config, payload_buf, sizeof(serv_cli_config_t));
-    printf("config connect_starter:%d \n", new_config.connect_starter);
+
+    sock_cmd_type_t pkt_type = sock_identify_pkt_type(pkt_buf);
+    switch (pkt_type) {
+    case CON_REQUEST:
+      printf("CON REQUEST \n");
+      break;
+    case CON_CLOSE:
+      printf("CON CLOSE \n");
+      break;
+    case DATA:
+      printf("DATA \n");
+      break;
+    default:
+      printf("UNKNOWN TYPE! \n");
+      break;
+    }
+    /* pkt_header_t pkt_header; */
+    /* char payload_buf[1500]; */
+    /* packet_decompose(pkt_buf, pkt_size, &pkt_header, payload_buf); */
+    /* serv_cli_config_t new_config; */
+    /* memcpy(&new_config, payload_buf, sizeof(serv_cli_config_t)); */
+    /* printf("config connect_starter:%d \n", new_config.connect_starter); */
   }
 
   return 0;

@@ -40,12 +40,7 @@ int sock_pkt_recv_single(int sock_fd, struct sockaddr_in remote_addr,
   if (n > 0) {
     printf("PORT: %d recv len:%d | %d %d \n", serv_addr.sin_port, n, recvBuf[0],
            recvBuf[1]);
-    /* sock_same_sock_addr(remote_addr, serv_addr){} */
-    // we recevie the connection request from client
-    if (sock_identify_pkt_type(recvBuf) == DATA) {
-      printf("we receive a data packet!");
-      memcpy(pkt, recvBuf, n);
-    }
+    memcpy(pkt, recvBuf, n);
   }
 
   return n;
