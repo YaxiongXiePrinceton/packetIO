@@ -13,6 +13,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+#include "log.h"
 #include "packet.h"
 #include "sock_cmd.h"
 #include "sock_pkt_txrx.h"
