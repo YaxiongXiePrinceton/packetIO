@@ -27,14 +27,15 @@ int sock_pkt_send_single(int sock_fd, struct sockaddr_in remote_addr, char *pkt,
   return 0;
 }
 
-int sock_pkt_recv_single(int sock_fd, struct sockaddr_in remote_addr, char *pkt,
-                         int pkt_size) {
+int sock_pkt_recv_single(int sock_fd, struct sockaddr_in remote_addr,
+                         char *pkt) {
   char recvBuf[1500];
   struct sockaddr_in serv_addr;
   unsigned int len = sizeof(serv_addr);
 
-  int n = recvfrom(sock_fd, (char *)recvBuf, 1400, MSG_WAITALL,
-                   (struct sockaddr *)&serv_addr, &len);
+  int n = 0;
+  n = recvfrom(sock_fd, (char *)recvBuf, 1400, MSG_WAITALL,
+               (struct sockaddr *)&serv_addr, &len);
 
   if (n > 0) {
     printf("PORT: %d recv len:%d | %d %d \n", serv_addr.sin_port, n, recvBuf[0],
@@ -43,8 +44,9 @@ int sock_pkt_recv_single(int sock_fd, struct sockaddr_in remote_addr, char *pkt,
     // we recevie the connection request from client
     if (sock_identify_pkt_type(recvBuf) == DATA) {
       printf("we receive a data packet!");
+      memcpy(pkt, recvBuf, n);
     }
   }
 
-  return 0;
+  return n;
 }

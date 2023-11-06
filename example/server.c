@@ -93,7 +93,9 @@ int main(int argc, char **argv) {
    * new_config.IP_known, */
   /*        new_config.local_IP, new_config.separate_txrx); */
   /**/
+
   if (config.sender) {
+    // sender
     pkt_header_t pkt_header;
     memset(&pkt_header, 0, sizeof(pkt_header_t));
     pkt_header.sequence_number = 1010;
@@ -103,6 +105,18 @@ int main(int argc, char **argv) {
                                sizeof(serv_cli_config_t));
 
     sock_pkt_send_single(sock_fd, remote_addr, pkt_buf, pkt_size);
+  } else {
+    // receiver
+    char pkt_buf[1500];
+    int pkt_size = 0;
+    pkt_size = sock_pkt_recv_single(sock_fd, remote_addr, pkt_buf);
+    pkt_header_t pkt_header;
+    char payload_buf[1500];
+    packet_decompose(pkt_buf, pkt_size, &pkt_header, payload_buf);
+    serv_cli_config_t new_config;
+    memcpy(&new_config, payload_buf, sizeof(serv_cli_config_t));
+    printf("config connect_starter:%d \n", new_config.connect_starter);
   }
+
   return 0;
 }
