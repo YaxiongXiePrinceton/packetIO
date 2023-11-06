@@ -94,6 +94,11 @@ int packetIO_read_config(serv_cli_config_t *config, char *path) {
   }
   printf("CONFIG -> send_port: %d\n", config->pkt_sent_config.send_port);
 
+  if (!config_lookup_int(cfg, "pkt_size", &config->pkt_sent_config.pkt_size)) {
+    printf("ERROR: reading pkt_size\n");
+  }
+  printf("CONFIG -> pkt_size: %d\n", config->pkt_sent_config.pkt_size);
+
   if (!config_lookup_int(cfg, "pkt_send_int_us",
                          &config->pkt_sent_config.pkt_send_int_us)) {
     printf("ERROR: reading pkt_send_int_us\n");

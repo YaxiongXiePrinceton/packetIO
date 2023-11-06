@@ -48,6 +48,8 @@ int main(int argc, char **argv) {
     }
   }
 
+  FILE *fd = fopen("pkt_log", "w+");
+
   packetIO_read_config(&config, config_path);
 
   bool separate_txrx = config.separate_txrx;
@@ -69,19 +71,19 @@ int main(int argc, char **argv) {
   }
 
   pkt_tx_config_t pkt_tx_config;
-  pkt_tx_config.pkt_size = 1400;
-  pkt_tx_config.pkt_num = 100;
-  pkt_tx_config.pkt_interval = 100;
+  pkt_tx_config.pkt_size = config.pkt_sent_config.pkt_size;
+  pkt_tx_config.pkt_num = config.pkt_sent_config.pkt_send_num;
+  pkt_tx_config.pkt_interval = config.pkt_sent_config.pkt_send_int_us;
 
   if (config.sender) {
     // let's send the packets
-    sock_pkt_send_multi_w_config(sock_fd, remote_addr, pkt_tx_config);
+    sock_pkt_send_multi_w_config(sock_fd, remote_addr, pkt_tx_config, fd);
 
     // after sending the packets, let's close the connection.
     sock_cmd_sent_w_type(sock_fd, remote_addr, CON_CLOSE);
   } else {
     // receiver
-    sock_pkt_recv_multi_no_output(sock_fd, remote_addr);
+    sock_pkt_recv_multi_no_output(sock_fd, remote_addr, fd);
   }
 
   return 0;

@@ -13,6 +13,7 @@ extern "C" {
 typedef struct {
   int send_pkt;
   int send_port;
+  int pkt_size;
   int pkt_send_int_us;
   int pkt_send_num;
 } pkt_sent_config_t;

@@ -33,6 +33,7 @@ int sock_cmd_print_type(sock_cmd_type_t pkt_type) {
     break;
   }
 }
+
 sock_cmd_type_t sock_cmd_identify_pkt_type(char *buf) {
   for (int i = 0; i < 4; i++) {
     printf("%02x", buf[i]);
@@ -63,6 +64,8 @@ int sock_cmd_generate_pkt_type(char buf[4], sock_cmd_type_t type) {
   }
   return 1;
 }
+
+// Send a command packet according to packet type
 int sock_cmd_sent_w_type(int sock_fd, struct sockaddr_in remote_addr,
                          sock_cmd_type_t pkt_type) {
   char recvBuf[1400];

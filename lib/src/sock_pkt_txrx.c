@@ -33,7 +33,7 @@ int sock_pkt_send_single(int sock_fd, struct sockaddr_in remote_addr, char *pkt,
 // pkt_size: the size of the packets
 // pkt_interval: the interval between two packets
 int sock_pkt_send_multi_w_config(int sock_fd, struct sockaddr_in remote_addr,
-                                 pkt_tx_config_t pkt_config) {
+                                 pkt_tx_config_t pkt_config, FILE *fd) {
   int pkt_num = pkt_config.pkt_num;
   int pkt_interval = pkt_config.pkt_interval;
   int pkt_size = pkt_config.pkt_size;
@@ -57,6 +57,7 @@ int sock_pkt_send_multi_w_config(int sock_fd, struct sockaddr_in remote_addr,
     packet_generate_wSize(pkt_buf, &pkt_header, pkt_size);
     sock_pkt_send_single(sock_fd, remote_addr, pkt_buf, pkt_size);
     pkt_sent++;
+    log_pkt_header(pkt_header, fd);
 
     while (true) {
       uint64_t curr_t = timestamp_us();
@@ -87,7 +88,8 @@ int sock_pkt_recv_single(int sock_fd, struct sockaddr_in remote_addr,
   return n;
 }
 
-int sock_pkt_recv_multi_no_output(int sock_fd, struct sockaddr_in remote_addr) {
+int sock_pkt_recv_multi_no_output(int sock_fd, struct sockaddr_in remote_addr,
+                                  FILE *fd) {
   char recvBuf[1500];
   /* wait for incoming packet OR expiry of timer */
   struct pollfd poll_fds[1];
@@ -114,6 +116,7 @@ int sock_pkt_recv_multi_no_output(int sock_fd, struct sockaddr_in remote_addr) {
           packet_extract_header(recvBuf, recvLen, &pkt_header);
           printf("Header sequence number: %d timestamp:%ld\n",
                  pkt_header.sequence_number, pkt_header.sent_timestamp);
+          log_pkt_header(pkt_header, fd);
         } else if (pkt_type == CON_CLOSE) {
           /* we receive the command to close the connection */
           printf("CONNECTION CLOSE received!\n");

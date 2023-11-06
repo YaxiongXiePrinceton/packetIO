@@ -30,12 +30,13 @@ typedef struct {
 int sock_pkt_send_single(int sock_fd, struct sockaddr_in remote_addr, char *pkt,
                          int pkt_size);
 int sock_pkt_send_multi_w_config(int sock_fd, struct sockaddr_in remote_addr,
-                                 pkt_tx_config_t pkt_config);
+                                 pkt_tx_config_t pkt_config, FILE *fd);
 
 int sock_pkt_recv_single(int sock_fd, struct sockaddr_in remote_addr,
                          char *pkt);
 
-int sock_pkt_recv_multi_no_output(int sock_fd, struct sockaddr_in remote_addr);
+int sock_pkt_recv_multi_no_output(int sock_fd, struct sockaddr_in remote_addr,
+                                  FILE *fd);
 #ifdef __cplusplus
 }
 #endif
