@@ -26,6 +26,8 @@ int connection_starter(int sock_fd, struct sockaddr_in serv_addr) {
 
   sock_cmd_generate_pkt_type(recvBuf, CON_REQUEST);
 
+  printf("STARTER: tx buf %d %d\n", recvBuf[0], recvBuf[1]);
+
   sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&serv_addr,
          sizeof(serv_addr));
   sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&serv_addr,
@@ -90,6 +92,7 @@ struct sockaddr_in connection_responder(int sock_fd) {
 
   // Generate and Send acks back to the starter
   sock_cmd_generate_pkt_type(recvBuf, CON_ACK);
+  printf("Responder: tx buf %d %d\n", recvBuf[0], recvBuf[1]);
   sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,
          sizeof(cli_addr));
   sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,

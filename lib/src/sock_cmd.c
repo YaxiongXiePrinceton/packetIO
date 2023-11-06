@@ -38,15 +38,15 @@ sock_cmd_type_t sock_cmd_identify_pkt_type(char *buf) {
 }
 
 int sock_cmd_generate_pkt_type(char buf[4], sock_cmd_type_t type) {
-  if (type == CON_REQUEST || type == CON_CLOSE) {
+  if (type == CON_REQUEST || type == CON_ACK || type == CON_CLOSE) {
     for (int i = 0; i < 4; i++) {
       buf[i] = (char)type;
-      return 1;
     }
   } else {
     printf("ERROR: Unkown or Incorrect Packet Type!\n");
     return -1;
   }
+  return 1;
 }
 int sock_cmd_print_type(sock_cmd_type_t pkt_type) {
   switch (pkt_type) {
