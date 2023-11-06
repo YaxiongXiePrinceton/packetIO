@@ -9,17 +9,11 @@ Runing the following commands To install the library:
 
 ```
 git clone git@github.com:YaxiongXiePrinceton/packetIO.git 
-
 cd packetIO
-
 mkdir build
-
 cd build 
-
 cmake ../
-
 make
-
 sudo make install
 
 ```
