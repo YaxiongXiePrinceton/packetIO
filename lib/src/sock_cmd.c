@@ -25,6 +25,9 @@ int sock_cmd_print_type(sock_cmd_type_t pkt_type) {
   case CON_CLOSE:
     printf("CON CLOSE \n");
     break;
+  case CON_ACK:
+    printf("CON ACK \n");
+    break;
   case DATA:
     printf("DATA \n");
     break;
@@ -70,7 +73,7 @@ int sock_cmd_sent_w_type(int sock_fd, struct sockaddr_in remote_addr,
                          sock_cmd_type_t pkt_type) {
   char recvBuf[1400];
 
-  printf("SCK_CMD_SEND: type: ");
+  printf("SOCK_CMD_SEND: type: ");
   sock_cmd_print_type(pkt_type);
 
   if (sock_cmd_generate_pkt_type(recvBuf, pkt_type)) {

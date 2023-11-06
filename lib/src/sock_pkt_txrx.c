@@ -122,7 +122,8 @@ int sock_pkt_recv_multi_no_output(int sock_fd, struct sockaddr_in remote_addr,
           log_pkt_header(pkt_header, fd);
         } else if (pkt_type == CON_CLOSE) {
           /* we receive the command to close the connection */
-          printf("CONNECTION CLOSE received!\n");
+          printf("CONNECTION CLOSE received, close the connection!\n");
+          printf(" Good Bye!\n");
           break;
         } else {
           continue;

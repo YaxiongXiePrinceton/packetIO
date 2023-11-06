@@ -26,6 +26,7 @@ int connection_starter(int sock_fd, struct sockaddr_in remote_addr) {
   char recvBuf[1400];
 
   // send the request command
+  printf("CONNECTION Starter: ");
   sock_cmd_sent_w_type(sock_fd, remote_addr, CON_REQUEST);
 
   struct sockaddr_in serv_addr;
@@ -39,10 +40,11 @@ int connection_starter(int sock_fd, struct sockaddr_in remote_addr) {
     recvLen = recvfrom(sock_fd, (char *)recvBuf, 1400, MSG_WAITALL,
                        (struct sockaddr *)&serv_addr, &len);
     if (recvLen > 0) {
-      printf("CONNECTION Starter: PORT: %d recv len:%d | %d %d \n",
-             serv_addr.sin_port, recvLen, recvBuf[0], recvBuf[1]);
-      // we recevie the connection request from client
+      // printf("CONNECTION Starter: PORT: %d recv len:%d | %d %d \n",
+      //        serv_addr.sin_port, recvLen, recvBuf[0], recvBuf[1]);
+      //  we recevie the connection request from client
       if (sock_cmd_identify_pkt_type(recvBuf) == CON_ACK) {
+        printf("CONNECTION Starter: Received CMD-type: CON_REQUEST\n");
         recvPkt++;
       }
     }
@@ -72,10 +74,11 @@ struct sockaddr_in connection_responder(int sock_fd) {
     recvLen = recvfrom(sock_fd, (char *)recvBuf, 1400, MSG_WAITALL,
                        (struct sockaddr *)&cli_addr, &len);
     if (recvLen > 0) {
-      printf("Connection Responder: PORT: %d recv len:%d | %d %d \n",
-             cli_addr.sin_port, recvLen, recvBuf[0], recvBuf[1]);
-      // we recevie the connection request from client
+      // printf("Connection Responder: PORT: %d recv len:%d | %02xd %02xd \n",
+      //        cli_addr.sin_port, recvLen, recvBuf[0], recvBuf[1]);
+      //  we recevie the connection request from client
       if (sock_cmd_identify_pkt_type(recvBuf) == CON_REQUEST) {
+        printf("Connection Responder: Received CMD-type: CON_REQUEST\n");
         recvPkt++;
       }
       curr_t = timestamp_ms();
@@ -85,20 +88,10 @@ struct sockaddr_in connection_responder(int sock_fd) {
       }
     }
   }
-
-  if (sock_cmd_sent_w_type(sock_fd, cli_addr, CON_ACK)) {
-    printf("CONNECTION ACK SENT!\n");
-  } else {
-    printf("ERROR: CONNECTION ACK SENT Failed!\n");
+  printf("Connection Responder: ");
+  if (!sock_cmd_sent_w_type(sock_fd, cli_addr, CON_ACK)) {
+    printf("Connection Responder: ERROR: CONNECTION ACK SENT Failed!\n");
   }
-
-  // Generate and Send acks back to the starter
-  //  sock_cmd_generate_pkt_type(recvBuf, CON_ACK);
-  // printf("Responder: tx buf %d %d\n", recvBuf[0], recvBuf[1]);
-  // sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,
-  //       sizeof(cli_addr));
-  // sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,
-  //       sizeof(cli_addr));
 
   return cli_addr;
 }
