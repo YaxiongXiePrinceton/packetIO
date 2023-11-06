@@ -41,8 +41,8 @@ int connection_starter(int sock_fd, struct sockaddr_in serv_addr) {
     recvLen = recvfrom(sock_fd, (char *)recvBuf, 1400, MSG_WAITALL,
                        (struct sockaddr *)&serv_addr, &len);
     if (recvLen > 0) {
-      printf("PORT: %d recv len:%d | %d %d \n", serv_addr.sin_port, recvLen,
-             recvBuf[0], recvBuf[1]);
+      printf("CONNECTION Starter: PORT: %d recv len:%d | %d %d \n",
+             serv_addr.sin_port, recvLen, recvBuf[0], recvBuf[1]);
       // we recevie the connection request from client
       if (sock_cmd_identify_pkt_type(recvBuf) == CON_ACK) {
         recvPkt++;
@@ -74,8 +74,8 @@ struct sockaddr_in connection_responder(int sock_fd) {
     recvLen = recvfrom(sock_fd, (char *)recvBuf, 1400, MSG_WAITALL,
                        (struct sockaddr *)&cli_addr, &len);
     if (recvLen > 0) {
-      printf("PORT: %d recv len:%d | %d %d \n", cli_addr.sin_port, recvLen,
-             recvBuf[0], recvBuf[1]);
+      printf("Connection Responder: PORT: %d recv len:%d | %d %d \n",
+             cli_addr.sin_port, recvLen, recvBuf[0], recvBuf[1]);
       // we recevie the connection request from client
       if (sock_cmd_identify_pkt_type(recvBuf) == CON_REQUEST) {
         recvPkt++;
