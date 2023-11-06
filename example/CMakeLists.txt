@@ -10,8 +10,7 @@ SET(PROJECT_NAME "packetio_app")
 PROJECT("${PROJECT_NAME}")
 
 INCLUDE(GNUInstallDirs)
-add_executable(server server.c )
-add_executable(client client.c )
+add_executable(main main.c )
 
 find_package(libconfig CONFIG REQUIRED)
 
@@ -25,5 +24,4 @@ LINK_DIRECTORIES(
 find_package(Threads REQUIRED)
 
 #find_package(dcisink)
-target_link_libraries(server packetio config pthread)
-target_link_libraries(client packetio config pthread)
+target_link_libraries(main packetio config pthread)

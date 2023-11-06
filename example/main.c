@@ -86,5 +86,6 @@ int main(int argc, char **argv) {
     sock_pkt_recv_multi_no_output(sock_fd, remote_addr, fd);
   }
 
+  fclose(fd);
   return 0;
 }
