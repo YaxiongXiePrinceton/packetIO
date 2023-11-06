@@ -70,15 +70,20 @@ int sock_pkt_send_multi_w_config(int sock_fd, struct sockaddr_in remote_addr,
 
   return 0;
 }
-int sock_pkt_recv_single(int sock_fd, struct sockaddr_in remote_addr,
+
+// receive a single packet:
+// remote_addr stores the client's address
+// pkt stores the received packets
+// we return the size of the received packet
+int sock_pkt_recv_single(int sock_fd, struct sockaddr_in* remote_addr,
                          char *pkt) {
   char recvBuf[1500];
   struct sockaddr_in serv_addr;
-  unsigned int len = sizeof(serv_addr);
+  unsigned int len = sizeof(struct sockaddr_in);
 
   int n = 0;
   n = recvfrom(sock_fd, (char *)recvBuf, 1400, MSG_WAITALL,
-               (struct sockaddr *)&serv_addr, &len);
+               (struct sockaddr *)remote_addr, &len);
 
   if (n > 0) {
     /* printf("PORT: %d recv len:%d | %d %d \n", serv_addr.sin_port, n,
@@ -90,9 +95,9 @@ int sock_pkt_recv_single(int sock_fd, struct sockaddr_in remote_addr,
   return n;
 }
 
-int sock_pkt_recv_multi_no_output(int sock_fd, struct sockaddr_in remote_addr,
-                                  FILE *fd) {
+int sock_pkt_recv_multi_no_ack(int sock_fd, FILE *fd) {
   char recvBuf[1500];
+  struct sockaddr_in remote_addr;
   /* wait for incoming packet OR expiry of timer */
   struct pollfd poll_fds[1];
   poll_fds[0].fd = sock_fd;
@@ -106,11 +111,9 @@ int sock_pkt_recv_multi_no_output(int sock_fd, struct sockaddr_in remote_addr,
   int recvLen = 0;
   while (true) {
     fflush(NULL);
-    // printf("WHILE LOOPING! pkt_rcv:%d nof_pkt:%d\n", _pkt_received,
-    // _nof_pkt);
     ppoll(poll_fds, 1, &timeout, NULL);
     if (poll_fds[0].revents & POLLIN) {
-      recvLen = sock_pkt_recv_single(sock_fd, remote_addr, recvBuf);
+      recvLen = sock_pkt_recv_single(sock_fd, &remote_addr, recvBuf);
       if (recvLen > 0) {
         pkt_type = sock_cmd_identify_pkt_type(recvBuf);
         if (pkt_type == DATA) {
@@ -120,7 +123,13 @@ int sock_pkt_recv_multi_no_output(int sock_fd, struct sockaddr_in remote_addr,
           /* pkt_header.sequence_number, pkt_header.sent_timestamp); */
           pkt_header.recv_timestamp = timestamp_us();
           log_pkt_header(pkt_header, fd);
-        } else if (pkt_type == CON_CLOSE) {
+        }else if (pkt_type == CON_REQUEST) {
+          // in case we recevie an CON_REQUEST during data reception, 
+          // we still send out our ACK to facilitate the connnection request
+          if (!sock_cmd_sent_w_type(sock_fd, remote_addr, CON_ACK)) {
+            printf("Connection Responder: ERROR: CONNECTION ACK SENT Failed!\n");
+          }
+        }else if (pkt_type == CON_CLOSE) {
           /* we receive the command to close the connection */
           printf("CONNECTION CLOSE received, close the connection!\n");
           printf(" Good Bye!\n");

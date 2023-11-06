@@ -35,8 +35,8 @@ int sock_pkt_send_multi_w_config(int sock_fd, struct sockaddr_in remote_addr,
 int sock_pkt_recv_single(int sock_fd, struct sockaddr_in remote_addr,
                          char *pkt);
 
-int sock_pkt_recv_multi_no_output(int sock_fd, struct sockaddr_in remote_addr,
-                                  FILE *fd);
+int sock_pkt_recv_multi_no_ack(int sock_fd, FILE *fd);
+
 #ifdef __cplusplus
 }
 #endif
