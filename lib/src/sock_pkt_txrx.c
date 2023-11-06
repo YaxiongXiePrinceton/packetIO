@@ -65,7 +65,7 @@ int sock_pkt_send_multi_w_config(int sock_fd, struct sockaddr_in remote_addr,
       if (curr_t - start_t >= pkt_interval)
         break;
     }
-    printf("PKT Sent:%d \n", pkt_sent);
+    /* printf("PKT Sent:%d \n", pkt_sent); */
   }
 
   return 0;
@@ -115,8 +115,9 @@ int sock_pkt_recv_multi_no_output(int sock_fd, struct sockaddr_in remote_addr,
         if (pkt_type == DATA) {
           pkt_header_t pkt_header;
           packet_extract_header(recvBuf, recvLen, &pkt_header);
-          printf("Header sequence number: %d timestamp:%ld\n",
-                 pkt_header.sequence_number, pkt_header.sent_timestamp);
+          /* printf("Header sequence number: %d timestamp:%ld\n", */
+          /* pkt_header.sequence_number, pkt_header.sent_timestamp); */
+          pkt_header.recv_timestamp = timestamp_us();
           log_pkt_header(pkt_header, fd);
         } else if (pkt_type == CON_CLOSE) {
           /* we receive the command to close the connection */
