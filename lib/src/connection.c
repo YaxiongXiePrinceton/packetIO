@@ -18,36 +18,40 @@
 #include <unistd.h>
 
 #include "connection.h"
+#include "sock_cmd.h"
+#include "time_stamp.h"
 // Send packets to the remote
 int connection_starter(int sock_fd, struct sockaddr_in serv_addr) {
   char recvBuf[1400];
-  recvBuf[0] = (char)0x13;
-  recvBuf[1] = (char)0x13;
-  recvBuf[2] = (char)0x13;
-  recvBuf[3] = (char)0x13;
 
-  // Socket
+  sock_cmd_generate_pkt_type(recvBuf, CON_REQUEST);
+
   sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&serv_addr,
          sizeof(serv_addr));
   sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&serv_addr,
          sizeof(serv_addr));
 
-  int n;
+  int recvLen = 0, recvPkt = 0;
   int len = sizeof(serv_addr);
+  int64_t curr_t, start_t = timestamp_ms();
+
   // Waiting for the packets from the starter
   while (true) {
-
     // recv data from client and get the client address
-    n = recvfrom(sock_fd, (char *)recvBuf, 1400, MSG_WAITALL,
-                 (struct sockaddr *)&serv_addr, &len);
-    if (n > 0) {
-      printf("PORT: %d recv len:%d | %d %d \n", serv_addr.sin_port, n,
+    recvLen = recvfrom(sock_fd, (char *)recvBuf, 1400, MSG_WAITALL,
+                       (struct sockaddr *)&serv_addr, &len);
+    if (recvLen > 0) {
+      printf("PORT: %d recv len:%d | %d %d \n", serv_addr.sin_port, recvLen,
              recvBuf[0], recvBuf[1]);
       // we recevie the connection request from client
-      if (recvBuf[0] == (char)0x13 && recvBuf[1] == (char)0x13 &&
-          recvBuf[2] == (char)0x13 && recvBuf[3] == (char)0x13) {
-        break;
+      if (sock_cmd_identify_pkt_type(recvBuf) == CON_ACK) {
+        recvPkt++;
       }
+    }
+    curr_t = timestamp_ms();
+    /* if we already received 2 packets or the timer (200ms) is fired */
+    if (recvPkt >= 2 || (curr_t - start_t >= 200)) {
+      break;
     }
   }
 
@@ -62,25 +66,34 @@ struct sockaddr_in connection_responder(int sock_fd) {
   memset(&cli_addr, 0, sizeof(struct sockaddr_in));
   len = sizeof(cli_addr);
 
+  int recvLen = 0, recvPkt = 0;
+  int64_t curr_t, start_t = timestamp_ms();
   // Waiting for the packets from the starter
   while (true) {
     // recv data from client and get the client address
-    n = recvfrom(sock_fd, (char *)recvBuf, 1400, MSG_WAITALL,
-                 (struct sockaddr *)&cli_addr, &len);
-    if (n > 0) {
-      printf("PORT: %d recv len:%d | %d %d \n", cli_addr.sin_port, n,
+    recvLen = recvfrom(sock_fd, (char *)recvBuf, 1400, MSG_WAITALL,
+                       (struct sockaddr *)&cli_addr, &len);
+    if (recvLen > 0) {
+      printf("PORT: %d recv len:%d | %d %d \n", cli_addr.sin_port, recvLen,
              recvBuf[0], recvBuf[1]);
       // we recevie the connection request from client
-      if (recvBuf[0] == (char)0x13 && recvBuf[1] == (char)0x13 &&
-          recvBuf[2] == (char)0x13 && recvBuf[3] == (char)0x13) {
-        // Send acks back to the starter
-        sendto(sock_fd, (char *)recvBuf, 4, 0,
-               (const struct sockaddr *)&cli_addr, sizeof(cli_addr));
-        sendto(sock_fd, (char *)recvBuf, 4, 0,
-               (const struct sockaddr *)&cli_addr, sizeof(cli_addr));
+      if (sock_cmd_identify_pkt_type(recvBuf) == CON_REQUEST) {
+        recvPkt++;
+      }
+      curr_t = timestamp_ms();
+      /* if we already received 2 packets or the timer (200ms) is fired */
+      if (recvPkt >= 2 || (curr_t - start_t >= 200)) {
         break;
       }
     }
   }
+
+  // Generate and Send acks back to the starter
+  sock_cmd_generate_pkt_type(recvBuf, CON_ACK);
+  sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,
+         sizeof(cli_addr));
+  sendto(sock_fd, (char *)recvBuf, 4, 0, (const struct sockaddr *)&cli_addr,
+         sizeof(cli_addr));
+
   return cli_addr;
 }

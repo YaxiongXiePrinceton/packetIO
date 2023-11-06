@@ -21,6 +21,7 @@
 #include "nat_punch.h"
 #include "packet.h"
 #include "sock.h"
+#include "sock_cmd.h"
 #include "sock_pkt_txrx.h"
 
 int main(int argc, char **argv) {
@@ -67,46 +68,16 @@ int main(int argc, char **argv) {
     remote_addr = connection_responder(sock_fd);
   }
 
-  if (config.sender) {
-    // sender
-    // pkt_header_t pkt_header;
-    // memset(&pkt_header, 0, sizeof(pkt_header_t));
-    // pkt_header.sequence_number = 1010;
-    char pkt_buf[1500];
-    int pkt_size;
+  pkt_tx_config_t pkt_tx_config;
+  pkt_tx_config.pkt_size = 1400;
+  pkt_tx_config.pkt_num = 100;
+  pkt_tx_config.pkt_interval = 100;
 
-    /* pkt_size = packet_generate(pkt_buf, &pkt_header, (void *)&config, */
-    /*                            sizeof(serv_cli_config_t)); */
-    sock_generate_pkt_type(pkt_buf, CON_REQUEST);
-    pkt_size = 4;
-    sock_pkt_send_single(sock_fd, remote_addr, pkt_buf, pkt_size);
+  if (config.sender) {
+    sock_pkt_send_multi_w_config(sock_fd, remote_addr, pkt_tx_config);
   } else {
     // receiver
-    char pkt_buf[1500];
-    int pkt_size = 0;
-    pkt_size = sock_pkt_recv_single(sock_fd, remote_addr, pkt_buf);
-
-    sock_cmd_type_t pkt_type = sock_identify_pkt_type(pkt_buf);
-    switch (pkt_type) {
-    case CON_REQUEST:
-      printf("CON REQUEST \n");
-      break;
-    case CON_CLOSE:
-      printf("CON CLOSE \n");
-      break;
-    case DATA:
-      printf("DATA \n");
-      break;
-    default:
-      printf("UNKNOWN TYPE! \n");
-      break;
-    }
-    /* pkt_header_t pkt_header; */
-    /* char payload_buf[1500]; */
-    /* packet_decompose(pkt_buf, pkt_size, &pkt_header, payload_buf); */
-    /* serv_cli_config_t new_config; */
-    /* memcpy(&new_config, payload_buf, sizeof(serv_cli_config_t)); */
-    /* printf("config connect_starter:%d \n", new_config.connect_starter); */
+    sock_pkt_recv_multi_no_output(sock_fd, remote_addr);
   }
 
   return 0;

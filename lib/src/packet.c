@@ -66,3 +66,15 @@ int packet_decompose(char pkt_buf[1500], int pkt_size, pkt_header_t *pkt_header,
 
   return 0;
 }
+
+int packet_extract_header(char pkt_buf[1500], int pkt_size,
+                          pkt_header_t *pkt_header) {
+  int head_size = sizeof(pkt_header_t);
+
+  if (pkt_size < head_size) {
+    printf("ERROR: Packet size is smaller than header!");
+    return -1;
+  }
+  memcpy(pkt_header, pkt_buf, head_size);
+  return 1;
+}

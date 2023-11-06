@@ -43,6 +43,8 @@ int packet_generate_wSize(char pkt_buf[1500], pkt_header_t *pkt_header,
 
 int packet_decompose(char pkt_buf[1500], int pkt_size, pkt_header_t *pkt_header,
                      char payload_buf[1500]);
+int packet_extract_header(char pkt_buf[1500], int pkt_size,
+                          pkt_header_t *pkt_header);
 
 #ifdef __cplusplus
 }

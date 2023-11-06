@@ -31,29 +31,6 @@ void sock_setnonblocking(int sockfd) {
   return;
 }
 
-sock_cmd_type_t sock_identify_pkt_type(char *buf) {
-  if (buf[0] == (char)CON_REQUEST && buf[1] == (char)CON_REQUEST &&
-      buf[2] == (char)CON_REQUEST && buf[3] == (char)CON_REQUEST) {
-    return CON_REQUEST;
-  } else if (buf[0] == (char)CON_CLOSE && buf[1] == (char)CON_CLOSE &&
-             buf[2] == (char)CON_CLOSE && buf[3] == (char)CON_CLOSE) {
-    return CON_CLOSE;
-  } else {
-    return DATA;
-  }
-}
-
-int sock_generate_pkt_type(char buf[4], sock_cmd_type_t type) {
-  if (type == CON_REQUEST || type == CON_CLOSE) {
-    for (int i = 0; i < 4; i++) {
-      buf[i] = (char)type;
-      return 1;
-    }
-  } else {
-    printf("ERROR: Unkown or Incorrect Packet Type!\n");
-    return -1;
-  }
-}
 // check whether two socks are the same
 bool sock_same_sock_addr(struct sockaddr_in *a, struct sockaddr_in *b) {
   if (a->sin_family == b->sin_family && a->sin_port == b->sin_port) {
